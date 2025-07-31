@@ -2,7 +2,7 @@ const express = require('express');
 const {
 	homePage,
     addNewCustomerPage,
-	addNewCustomer, 
+	postNewCustomer, 
 	getCustomer,
 	getAllCustomers,
 	updateCustomer,
@@ -13,6 +13,8 @@ const customerRoute = express.Router();
 
 //Customer Routes
 customerRoute.get('/', homePage);
+
 customerRoute.get('/addCustomer', addNewCustomerPage);
+customerRoute.post("/addCustomer", postNewCustomer);
 
 module.exports = customerRoute;
