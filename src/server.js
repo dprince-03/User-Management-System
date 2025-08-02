@@ -4,6 +4,7 @@ const express = require('express');
 const expressLayout = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
+const methodOverride = require('method-override');
 
 const connectDB = require('./config/db.config');
 const customerRoute = require('./routes/customer.routes');
@@ -16,6 +17,7 @@ connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 
 //Static files
 app.use(express.static('public'));
@@ -25,23 +27,21 @@ app.use(expressLayout);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
 
-//home route
-app.use('/', customerRoute);
-
 // Express session
 app.use(session({
 	secret: 'secret',
 	resave: false,
 	saveUninitialized: true,
-	cookies: {
+	cookie: {
 		maxAge: 1000 * 60 * 60 * 24 * 7
 	}
 }));
 
 // Flash message (middleware)
-app.use(flash({
-	sessionKeyName: 'flashMessage',
-}));
+app.use(flash());
+
+//home route
+app.use('/', customerRoute);
 
 //Handle 404
 app.use((req, res) => {
